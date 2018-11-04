@@ -1,19 +1,10 @@
 <template>
     <div id="app-background">
-        <el-upload
-                class="upload-demo"
-                drag
-                action="https://jsonplaceholder.typicode.com/posts/"
-                :on-remove="handleRemove"
-                :on-preview="handlePreview"
-                :on-success="uploadSuccess"
-                :limit="1"
-                multiple
-                :file-list="fileList2"><i class="el-icon-upload"></i>
+        <el-upload class="upload-demo" drag action="https://jsonplaceholder.typicode.com/posts/" :on-remove="handleRemove" :on-preview="handlePreview" :on-success="uploadSuccess" :limit="1" multiple :file-list="fileList2">
+            <i class="el-icon-upload"></i>
             <div class="el-upload__text">Drop file here or <em>click to upload</em></div>
         </el-upload>
-        <el-color-picker v-model="bg.color.current" :predefine="bg.color.predefineColors" show-alpha show-alpha
-                         @change="addPredefineColors($event)"></el-color-picker>
+        <el-color-picker v-model="bg.color.current" :predefine="bg.color.predefineColors" show-alpha show-alpha @change="addPredefineColors($event)"></el-color-picker>
         <section>
             <h4>repeat:</h4>
             <el-radio-group v-model="bg.repeat" :disabled="!this.bg.upload">
@@ -41,23 +32,17 @@
                     X
                 </el-col>
                 <el-col :span="20">
-                    <el-slider v-model="sizeSlider[0]" :min="bg.size.min[0]" :max="bg.size.max[0]"
-                               @input="changeSlider($event)" :disabled="!bg.upload">x
-                    </el-slider>
+                    <el-slider v-model="bg.size.current[0]" :min="bg.size.min[0]" :max="bg.size.max[0]" @input="changeSlider($event)" :disabled="!bg.upload">x</el-slider>
                 </el-col>
             </el-row>
-            <el-switch v-model="lock" active-text="lock" inactive-text="unlock" @change="changeSwitch()"
-                       :disabled="!bg.upload">lock
-            </el-switch>
+            <el-switch v-model="lock" active-text="lock" inactive-text="unlock" @change="changeSwitch()" :disabled="!bg.upload">lock</el-switch>
             <el-row>
                 <el-col :span="4">
                     <br>
                     Y
                 </el-col>
                 <el-col :span="20">
-                    <el-slider v-model="sizeSlider[1]" :min="bg.size.min[1]" :max="bg.size.max[1]"
-                               @input="changeSlider($event)" :disabled="!bg.upload">y
-                    </el-slider>
+                    <el-slider v-model="bg.size.current[1]" :min="bg.size.min[1]" :max="bg.size.max[1]" @input="changeSlider($event)" :disabled="!bg.upload">y</el-slider>
                 </el-col>
             </el-row>
             <el-radio-group v-model="cover" @change="changeRadio()" :disabled="!bg.upload">
@@ -72,17 +57,16 @@
 <script>
   export default {
     name: 'Background',
-    props: ['bdbg'],
+    props: ['component_id'],
     data () {
+      var background = this.$store.getters.get__background(this.component_id);
       return {
+        bg: background,
         fileList2: [],
-        bg: this.bdbg,
         lock: false,
-        sizeSlider: this.bdbg.size.current,
-        cover: this.bdbg.size.value
+        cover: background.size.value
       }
     },
-    computed: {},
     methods: {
       uploadSuccess (response, file, list) {
         this.bg.url = file.url
@@ -96,17 +80,17 @@
       changeSlider (e) {
         this.cover = '';
         if(this.lock) {
-          this.sizeSlider[0] = e;
-          this.sizeSlider[1] = e;
-          this.sizeSlider[0] = this.sizeSlider[1];
+          this.bg.size.current[0] = e;
+          this.bg.size.current[1] = e;
+          this.bg.size.current[0] = this.bg.size.current[1];
           this.bg.size.value = e + 'px';
         } else {
-          this.bg.size.value = this.sizeSlider[0] + 'px ' + this.sizeSlider[1] +'px';
+          this.bg.size.value = this.bg.size.current[0] + 'px ' + this.bg.size.current[1] +'px';
         }
       },
       changeSwitch () {
         if (this.lock) {
-          this.sizeSlider[0] = this.sizeSlider[1] = this.sizeSlider[0]
+          this.bg.size.current[0] = this.bg.size.current[1] = this.bg.size.current[0]
         }
       },
       changeRadio () {
@@ -117,6 +101,14 @@
           this.bg.color.predefineColors.push(e)
         }
       }
+    },
+    watch: {
+     bg: {
+       handler () {
+         this.$store.dispatch('background', {id: this.component_id, value: this.bg})
+       },
+       deep: true
+     }
     }
   }
 </script>

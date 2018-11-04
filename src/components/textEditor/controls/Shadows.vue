@@ -35,11 +35,11 @@
 <script>
   export default {
     name: 'Shadows',
-    props: ['bdshadow'],
+    props: ['component_id'],
     data () {
       return {
         title: 'Размер шрифта',
-        shadow: this.bdshadow
+        shadow: this.$store.getters.get__shadow(this.component_id)
       }
     },
     methods: {
@@ -48,6 +48,14 @@
         this.shadow.color.predefineColors.push(e);
         }
       }
+    },
+    watch: {
+     shadow: {
+       handler () {
+         this.$store.dispatch('shadow', {id: this.component_id, value: this.shadow})
+       },
+       deep: true
+     }
     }
   }
 </script>

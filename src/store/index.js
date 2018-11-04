@@ -164,16 +164,60 @@ getters.get__shadow = state => id => _.cloneDeep(state.components[id].style.shad
 getters.get__position = state => id => _.cloneDeep(state.components[id].style.position);
 getters.get__background = state => id => _.cloneDeep(state.components[id].style.background);
 getters.get__transform = state => id => _.cloneDeep(state.components[id].style.transform);
-getters.get__style = state => id => _.cloneDeep(state.components[id].style.style);
+getters.get__style = state => id => _.cloneDeep(state.components[id].style);
 getters.get__listComponents = state => _.cloneDeep(state.components);
 
 //mutation
-mutations.font__set = (state, F) => {
-  state.components[F.id].style.font = F.value;
+mutations.set__font = (state, data) => {
+  state.components[data.id].style.font = data.value;
+}
+mutations.set__interval = (state, data) => {
+  state.components[data.id].style.interval = data.value;
+}
+mutations.set__shadow = (state, data) => {
+  state.components[data.id].style.shadow = data.value;
+}
+mutations.set__position = (state, data) => {
+  state.components[data.id].style.position = data.value;
+}
+mutations.set__background = (state, data) => {
+  state.components[data.id].style.background = data.value;
+}
+mutations.set__transform = (state, data) => {
+  state.components[data.id].style.transform = data.value;
+}
+mutations.set__style_preview = (state, data) => {
+  state.components[data.id].style.preview = data.value;
+}
+mutations.set__style_position = (state, data) => {
+  state.components[data.id].position.pos = data.value;
+}
+mutations.set__style = (state, data) => {
+  state.components[data.id].style_preview = _.cloneDeep(state.components[data.id].style.preview)
 }
 
 //action
-// action.font = () => {}
+actions.font = (state, data) => {
+  state.commit('set__font', data);
+}
+actions.interval = (state, data) => {
+  state.commit('set__interval', data);
+}
+actions.shadow = (state, data) => {
+  state.commit('set__shadow', data);
+}
+actions.position = (state, data) => {
+  state.commit('set__position', data);
+}
+actions.background = (state, data) => {
+  state.commit('set__background', data);
+}
+actions.transform = (state, data) => {
+  state.commit('set__transform', data);
+}
+actions.style = (state, data) => {
+  state.commit('set__style', data);
+}
 
 
 const store = new Vuex.Store({

@@ -1,7 +1,7 @@
 <template>
     <div class="listComponent">
         <ul class="list">
-            <li class="listComponent__item" v-for="item,index in list">{{item.name}}
+            <li class="listComponent__item" v-for="item,index in componentList">{{item.name}}
                 <el-button type="primary" icon="el-icon-edit" @click="item.dialogVisible = true"></el-button>
                 <el-dialog title="Tips" :visible.sync="item.dialogVisible" width="90%">
                     <div class="container__wrapper">
@@ -10,7 +10,7 @@
                     </div>
                     <span slot="footer" class="dialog-footer">
                             <el-button @click="item.dialogVisible = false">Cancel</el-button>
-                            <el-button type="primary" @click="item.dialogVisible = false;styleConfirm(item)">Confirm</el-button>
+                            <el-button type="primary" @click="item.dialogVisible = false;styleConfirm(item,index)">Confirm</el-button>
                         </span>
                 </el-dialog>
                 <el-row>
@@ -43,8 +43,7 @@
 
                 <el-row :gutter="15">
                     <el-col :span="8" :offset="8">
-                        <el-slider v-model="item.position.offset[0]" :min="0" :max="100" @input="" vertical
-                                   height="100px"></el-slider>
+                        <el-slider v-model="item.position.offset[0]" :min="0" :max="100" @input="" vertical height="100px"></el-slider>
                     </el-col>
                 </el-row>
                 <el-row :gutter="15">
@@ -57,8 +56,7 @@
                 </el-row>
                 <el-row :gutter="15">
                     <el-col :span="8" :offset="8">
-                        <el-slider v-model="item.position.offset[2]" :min="0" :max="100" vertical
-                                   height="100px"></el-slider>
+                        <el-slider v-model="item.position.offset[2]" :min="0" :max="100" vertical height="100px"></el-slider>
                     </el-col>
                 </el-row>
             </li>
@@ -72,19 +70,19 @@
 
   export default {
     name: 'ListCom',
-    props: ['list'],
     components: {
       Controls,
       Preview
     },
     data () {
       return {
-        title: 'Component List'
+        title: 'Component List',
+        componentList: this.$store.getters.get__listComponents
       }
     },
     methods: {
-      styleConfirm(item) {
-        item.style_preview = item.style.preview;
+      styleConfirm(item,index) {
+        this.$store.dispatch('style', {id: index})
       }
     }
   }

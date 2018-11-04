@@ -5,10 +5,10 @@
                 Межстрочный интервал
             </el-col>
             <el-col :span="14">
-                <el-slider v-model="intervalComponent.line.current" :min="intervalComponent.line.min" :max="intervalComponent.line.max"></el-slider>
+                <el-slider v-model="interval.line.current" :min="interval.line.min" :max="interval.line.max"></el-slider>
             </el-col>
         </el-row>
-        <Unit :prop="intervalComponent.line.px"></Unit>
+        <Unit :prop="interval.line.px"></Unit>
         <br>
         <br>
         <br>
@@ -17,7 +17,7 @@
                 Межбуквенный интервал
             </el-col>
             <el-col :span="14">
-                <el-slider v-model="intervalComponent.letter.current" :min="intervalComponent.letter.min" :max="intervalComponent.letter.max"></el-slider>
+                <el-slider v-model="interval.letter.current" :min="interval.letter.min" :max="interval.letter.max"></el-slider>
             </el-col>
         </el-row>
         <el-row>
@@ -25,7 +25,7 @@
                 Интервал между словами
             </el-col>
             <el-col :span="14">
-                <el-slider v-model="intervalComponent.word.current" :min="intervalComponent.word.min" :max="intervalComponent.word.max"></el-slider>
+                <el-slider v-model="interval.word.current" :min="interval.word.min" :max="interval.word.max"></el-slider>
             </el-col>
         </el-row>
     </div>
@@ -35,15 +35,23 @@
     import Unit from '../../module/unit'
   export default {
     name: 'Interval',
-    props: ['bdinterval'],
+    props: ['component_id'],
     components: {
       Unit
     },
     data () {
       return {
         title: 'Размер шрифта',
-        intervalComponent: this.bdinterval
+          interval: this.$store.getters.get__interval(this.component_id)
       }
+    },
+    watch: {
+     interval: {
+       handler () {
+         this.$store.dispatch('interval', {id: this.component_id, value: this.interval})
+       },
+       deep: true
+     }
     }
   }
 </script>

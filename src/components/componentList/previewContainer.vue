@@ -1,7 +1,6 @@
 <template>
     <div class="previewComponent">
-        <div class="textPreview" v-for="(item, index) in data" :class="positionClass(item.position.pos)"
-             :style="offsetStyle(index)">
+        <div class="textPreview" v-for="(item, index) in data" :class="positionClass(item.position.pos,index)" :style="offsetStyle(index)">
             <div class="style_text_preview" :style="item.style_preview">
                 {{item.name}} {{item.name}} {{item.name}} {{item.name}} {{item.name}}
             </div>
@@ -12,15 +11,18 @@
 <script>
   export default {
     name: 'PreviewCom',
-    props: ['preview'],
     data () {
       return {
         title: 'Component Container',
-        data: this.preview
+        // data: this.$store.getters.get__listComponents
       }
+    },
+    computed:{
+      data(){return this.$store.getters.get__listComponents}
     },
     methods: {
       offsetStyle (e) {
+        console.log(this.data);
         let thisCom = this.data[e]
         let pos = thisCom.position.pos
         let margin = {}
@@ -42,11 +44,12 @@
           margin.marginTop = top + 'px'
           margin.marginBottom = bottom + 'px'
         }
-
+        
         return margin
       },
-      positionClass (e) {
+      positionClass (e,index) {
         let sectionN = 'section' + e
+        // this.$store.commit('set__style_position',{id: index, value: e})
         return sectionN
       },
     }

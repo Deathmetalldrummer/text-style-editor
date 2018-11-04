@@ -26,7 +26,6 @@
         <h4>Text color</h4>
         <el-color-picker v-model="font.color.current" :predefine="font.color.predefineColors" show-alpha
                          @change="addPredefineColors($event)" @active-change="activeChange($event)"></el-color-picker>
-    <button @click="logi()">log</button>
     </div>
 </template>
 
@@ -53,21 +52,15 @@
       },
       activeChange (e) {
         this.font.color.current = e
-      },
-      logi(){
-        console.log(this.font.fontSize.current);
-        console.log(this.$store.getters.get__font(this.component_id).fontSize.current);
       }
     },
     watch: {
-     // font: {
-     //   handler () {
-     //     console.log(this.font.fontSize.current);
-     //     console.log(this.$store.getters.get__font(this.component_id).fontSize.current);
-     //     // this.$store.commit('font__set', {id: this.component_id, value: this.font})
-     //   },
-     //   deep: true
-     // }
+     font: {
+       handler () {
+         this.$store.dispatch('font', {id: this.component_id, value: this.font})
+       },
+       deep: true
+     }
     }
   }
 </script>

@@ -121,14 +121,16 @@
 <script>
   export default {
     name: 'Transform',
-    props: ['bdtranform'],
+    props: ['component_id'],
     data () {
+      var transform = this.$store.getters.get__transform(this.component_id);
       return {
-        rotate: this.bdtranform.rotation,
-        scale: this.bdtranform.scaling,
-        skewing: this.bdtranform.skewing,
-        translation: this.bdtranform.translation,
-        perspective: this.bdtranform.perspective,
+        transform,
+        rotate: transform.rotation,
+        scale: transform.scaling,
+        skewing: transform.skewing,
+        translation: transform.translation,
+        perspective: transform.perspective,
         rotate3d: false,
         translation3d: false,
         scale3d: false
@@ -178,6 +180,15 @@
       perspectiveComputed () {
         this.perspective.preview = ((this.perspective.value) ? 'perspective(' + this.perspective.value + 'px) ' : '')
       }
+    },
+    watch: {
+     transform: {
+       handler () {
+         console.log(this.transform);
+         this.$store.dispatch('transform', {id: this.component_id, value: this.transform})
+       },
+       deep: true
+     }
     }
   }
 </script>
